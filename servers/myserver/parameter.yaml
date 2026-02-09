@@ -1,0 +1,9 @@
+#chunk_md_documents
+raw_md_path: corpora/AQ 1011-2005煤矿在用主通风机系统安全检测检验规范.md
+chunk_md_path: corpora/chunks_检测.jsonl
+
+##chunk_md_file_documents
+raw_md_file_path: corpora/AQ
+chunk_md_file_path: corpora/chunks_all_md_result.jsonl
+
+# get_citation_file

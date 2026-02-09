@@ -1,0 +1,40 @@
+# macOS system files
+.DS_Store
+
+# Python cache and temporary files
+__pycache__/
+*.pyc
+*.npy
+*.index
+
+# VSCode editor configuration
+.vscode/
+
+# Runtime and download caches
+.infinity_cache/
+pretrained_models/
+embedding/
+index/
+output/
+logs/
+test/
+corpora/
+data/chat_sessions/
+data/knowledge_base/
+# Environment variables and secrets
+.env
+
+# Example configuration files
+examples/parameter/*.yaml
+examples/server/*.yaml
+
+examples/
+corpora/AQ/
+corpora/AQ_pdf_json.zip
+milvus_data/
+
+# Server configuration files for each server module
+servers/*/server.yaml
+
+# Python package metadata
+src/*.egg-info/
