@@ -1,0 +1,7 @@
+# MCP Server
+servers:
+  myserver: servers/myserver
+
+# MCP Client Pipeline
+pipeline:
+- myserver.chunk_md_file_documents

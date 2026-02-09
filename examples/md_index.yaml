@@ -1,0 +1,8 @@
+# 建立向量索引库
+servers:
+  retriever: servers/retriever
+
+pipeline:
+- retriever.retriever_init
+- retriever.retriever_embed
+- retriever.retriever_index

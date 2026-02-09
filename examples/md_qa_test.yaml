@@ -1,0 +1,14 @@
+servers:
+  benchmark: servers/benchmark
+  retriever: servers/retriever
+  custom: servers/custom
+  myserver: servers/myserver
+
+# MCP Client Pipeline
+pipeline:
+- benchmark.get_data
+- retriever.retriever_init
+- retriever.retriever_search
+- custom.assign_citation_ids
+- myserver.get_citation_file
+
