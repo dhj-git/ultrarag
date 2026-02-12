@@ -7,7 +7,7 @@ MILVUS_IMAGE=milvusdb/milvus:v2.6.9
 GRPC_PORT=29901
 HTTP_PORT=29902
 
-DATA_DIR=/mnt/d/wenjian/vscodeworkspace/UltraRag/UltraRAG/milvus_data
+DATA_DIR=/home/dhj/vsworkspace/ultrarag/milvus_data
 
 echo "==> Starting Milvus (standalone)"
 echo "==> gRPC: ${GRPC_PORT}, HTTP: ${HTTP_PORT}"

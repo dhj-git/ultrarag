@@ -25,10 +25,10 @@ data/knowledge_base/
 .env
 
 # Example configuration files
-examples/parameter/*.yaml
-examples/server/*.yaml
+# examples/parameter/*.yaml
+# examples/server/*.yaml
 
-examples/
+# examples/
 corpora/AQ/
 corpora/AQ_pdf_json.zip
 milvus_data/
