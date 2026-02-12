@@ -25,14 +25,10 @@ data/knowledge_base/
 .env
 
 # Example configuration files
-<<<<<<< HEAD
 # examples/parameter/*.yaml
 # examples/server/*.yaml
 
 # examples/
-=======
-
->>>>>>> 9862f62 (添加参数文件)
 corpora/AQ/
 corpora/AQ_pdf_json.zip
 milvus_data/
