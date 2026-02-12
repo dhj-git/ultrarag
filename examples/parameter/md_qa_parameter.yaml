@@ -28,7 +28,11 @@ retriever:
     openai:
       model_name:  text-embedding-v4
       base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+<<<<<<< HEAD
       api_key: sk-5230a3
+=======
+      api_key: sk-5230a376a71a4ae7ab124baaf198405d
+>>>>>>> db035d7 (添加参数文件)
     bm25:
       lang: en
       save_path: index/bm25
@@ -74,7 +78,11 @@ generation:
     openai:
       model_name: qwen-plus
       base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+<<<<<<< HEAD
       api_key: sk-5230a376
+=======
+      api_key: sk-5230a376a71a4ae7ab124baaf198405d
+>>>>>>> db035d7 (添加参数文件)
       concurrency: 8
       retries: 3
       base_delay: 1.0
