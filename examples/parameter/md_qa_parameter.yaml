@@ -26,7 +26,7 @@ retriever:
         psg_task: null
         q_task: null
     openai:
-      model_name:  text-embedding-v4
+      model_name: text-embedding-v4
       base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
       api_key: sk-5230a376a71a4ae7ab124baaf198405d
     bm25:
@@ -73,10 +73,14 @@ generation:
       trust_remote_code: true
     openai:
 <<<<<<< HEAD
+<<<<<<< HEAD
       model_name: deepseek-v3.2
 =======
       model_name: qwen-plus
 >>>>>>> db035d7 (添加参数文件)
+=======
+      model_name: deepseek-v3.2
+>>>>>>> f34c844 (dev:添加 MCP 预热逻辑)
       base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
       api_key: sk-5230a376a71a4ae7ab124baaf198405d
       concurrency: 8
@@ -96,10 +100,14 @@ generation:
       enable_thinking: false
   backend: openai
 <<<<<<< HEAD
+<<<<<<< HEAD
   system_prompt: 你现在是一个基于检索增强生成技术的系统，请根据检索到的内容，准确的回答用户的问题，请一定记住使用中文回答问题
 =======
   system_prompt: '你现在是一个基于检索增强生成技术的系统，请根据检索到的内容，准确的回答用户的问题，请一定记住使用中文回答问题'
 >>>>>>> db035d7 (添加参数文件)
+=======
+  system_prompt: 你现在是一个基于检索增强生成技术的系统，请根据检索到的内容，准确的回答用户的问题，请一定记住使用中文回答问题
+>>>>>>> f34c844 (dev:添加 MCP 预热逻辑)
 custom: {}
 prompt:
   template: prompt/md_qa_rag_citation.jinja
