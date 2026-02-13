@@ -196,7 +196,7 @@ function resolveInitialLanguage() {
     }
 
     // Default to English
-    return "en";
+    return "zh";
 }
 
 const state = {

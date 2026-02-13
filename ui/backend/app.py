@@ -1402,8 +1402,6 @@ def create_app(admin_mode: bool = False) -> Flask:
 
     return app
 
-
-
 def build_ai_system_prompt(context: Dict) -> str:
     """Build system prompt with current context"""
     base_prompt = """You are an AI assistant for UltraRAG, a RAG (Retrieval-Augmented Generation) pipeline configuration system.
