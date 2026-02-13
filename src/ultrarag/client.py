@@ -85,7 +85,8 @@ def launch_ui(
     ui_logger.info("UltraRAG UI (%s mode) started: http://%s:%d", mode_str, host, port)
 
     try:
-        app.run(host=host, port=port, debug=False)  ###原flask
+        # app.run(host=host, port=port, debug=False)  ###原flask
+        app.run(host=host, port=port, debug=True, use_reloader=False, threaded=True)
         # import uvicorn
         # uvicorn.run(app, host=host, port=port,reload=False)
     except OSError as exc:

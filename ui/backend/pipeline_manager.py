@@ -281,8 +281,72 @@ def _ensure_client_funcs():
         LOGGER.error(msg)
         raise PipelineManagerError(msg) from exc
 
+#增加全局客户端管理
+class GlobalClientManager:
+    def __init__(self):
+        self.client = None
+        self.context = None  # 增加 context 存储
+        self.loop = None
+        self.thread = None
+        self._ready = threading.Event()
 
-# Session Management (Multi-Client Support)
+    def _start_loop(self):
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
+        self.loop.run_forever()
+
+    def start(self, pipeline_name: str):
+        if self.thread is not None:
+            return
+        
+        self.thread = threading.Thread(target=self._start_loop, daemon=True)
+        self.thread.start()
+
+        while self.loop is None:
+            time.sleep(0.1)
+
+        # 这里通过 result() 同步等待异步初始化完成
+        future = asyncio.run_coroutine_threadsafe(self._async_init(pipeline_name), self.loop)
+        return future.result()
+
+    async def _async_init(self, pipeline_name):
+        funcs = _ensure_client_funcs()
+        config_file = str(_find_pipeline_file(pipeline_name))
+        param_file = str(_resolve_parameter_path(pipeline_name))
+        
+        # 核心：保存全局 context 和 client
+        self.context = funcs["load_ctx"](config_file, param_file)
+        self.client = funcs["create_client"](self.context["mcp_cfg"])
+        
+        await self.client.__aenter__()
+        LOGGER.info(f"Global MCP Client for {pipeline_name} started.")
+        return True
+    
+    def run_chat(self, callback=None, dynamic_params=None):
+        if not self.client or not self.context:
+            raise RuntimeError("Global client not initialized")
+
+        funcs = _ensure_client_funcs()
+
+        future = asyncio.run_coroutine_threadsafe(
+            funcs["exec_pipe"](
+                self.client,
+                self.context,
+                is_demo=True,
+                return_all=True,
+                stream_callback=callback,
+                override_params=dynamic_params or {},
+            ),
+            self.loop,
+        )
+
+        return future.result()
+
+# 实例化
+global_manager = GlobalClientManager()
+
+
+# # Session Management (Multi-Client Support)
 class DemoSession:
     def __init__(self, session_id: str):
         self.session_id = session_id
@@ -313,14 +377,14 @@ class DemoSession:
     def touch(self):
         self.last_accessed = time.time()
 
-    def start(self, name: str):
+    def start(self, name: str): #name 从这里传过来的
         self.touch()
         if self._active:
             return
 
         funcs = _ensure_client_funcs()
-        config_file = _find_pipeline_file(name)
-        if not config_file:
+        config_file = _find_pipeline_file(name) #name = 'md_qa'  ##可修改
+        if not config_file:   #config_file = PosixPath('/home/dhj/vsworkspace/ultrarag/examples/md_qa.yaml')
             raise PipelineManagerError(f"Pipeline {name} not found")
 
         param_path = _resolve_parameter_path(name, for_write=False)
@@ -336,6 +400,7 @@ class DemoSession:
         except Exception as e:
             LOGGER.error(f"Session start failed: {e}")
             raise PipelineManagerError(f"Connection failed: {e}")
+    
 
     def stop(self):
         self.touch()
@@ -365,6 +430,7 @@ class DemoSession:
         self._conversation_history = []
 
         LOGGER.info(f"Session {self.session_id} stopped")
+
 
     def add_to_history(self, role: str, content: str) -> None:
         """Add message to conversation history.
@@ -549,6 +615,15 @@ class DemoSession:
         Raises:
             PipelineManagerError: If session is not active
         """
+        #修改成为全局client
+        if global_manager.client:
+            LOGGER.info("♻ Reusing Global MCP Client")
+
+            self._client = global_manager.client
+            # self._context = global_manager.context
+            self._active = True
+        # print(f"*--*"*10)
+        # print(self._context)
         self.touch()
         if not self._active:
             raise PipelineManagerError("Session not active")

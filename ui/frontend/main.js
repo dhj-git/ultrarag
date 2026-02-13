@@ -2411,7 +2411,7 @@ async function startEngine(pipelineName) {
         setChatStatus("Initializing...", "warn");
 
         try {
-            const newSid = uuidv4();
+            const newSid = uuidv4(); //生成唯一标识码
 
             // Call backend to start
             await fetchJSON(`/api/pipelines/${encodeURIComponent(pipelineName)}/demo/start`, {
@@ -2673,7 +2673,7 @@ async function renderChatPipelineMenu() {
 
     // If no Pipeline is currently selected, auto-select and load the first available one
     if (!state.selectedPipeline && readyPipelines.length > 0) {
-        const defaultName = readyPipelines[0].name;
+        const defaultName = readyPipelines[0].name;  // 默认pipeline
         try {
             await loadPipeline(defaultName, { ignoreUnsaved: true });
             state.selectedPipeline = defaultName;

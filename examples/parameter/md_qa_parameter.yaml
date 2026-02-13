@@ -1,7 +1,7 @@
 benchmark:
   benchmark:
     name: nq
-    path: data/sample_nq_10.jsonl
+    path: data/chat_sessions/md_qa_1770963360123.jsonl
     key_map:
       q_ls: question
       gt_ls: golden_answers
@@ -26,7 +26,7 @@ retriever:
         psg_task: null
         q_task: null
     openai:
-      model_name:  text-embedding-v4
+      model_name: text-embedding-v4
       base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
 <<<<<<< HEAD
       api_key: sk-5230a3
@@ -76,7 +76,7 @@ generation:
       dtype: auto
       trust_remote_code: true
     openai:
-      model_name: qwen-plus
+      model_name: deepseek-v3.2
       base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
 <<<<<<< HEAD
       api_key: sk-5230a376
@@ -99,7 +99,7 @@ generation:
     chat_template_kwargs:
       enable_thinking: false
   backend: openai
-  system_prompt: '你现在是一个基于检索增强生成技术的系统，请根据检索到的内容，准确的回答用户的问题，请一定记住使用中文回答问题'
+  system_prompt: 你现在是一个基于检索增强生成技术的系统，请根据检索到的内容，准确的回答用户的问题，请一定记住使用中文回答问题
 custom: {}
 prompt:
   template: prompt/md_qa_rag_citation.jinja

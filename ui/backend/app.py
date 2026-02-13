@@ -110,6 +110,7 @@ def create_app(admin_mode: bool = False) -> Flask:
     app = Flask(__name__, static_folder=str(FRONTEND_DIR), static_url_path="")
     app.config["ADMIN_MODE"] = admin_mode
 
+    
     @app.errorhandler(pm.PipelineManagerError)
     def handle_pipeline_error(
         err: pm.PipelineManagerError,
@@ -202,7 +203,7 @@ def create_app(admin_mode: bool = False) -> Flask:
         return jsonify(pm.list_servers())
 
     @app.route("/api/tools", methods=["GET"])
-    def tools() -> Response:
+    def tools() -> Response: #第一
         """List available tools from all servers.
 
         Returns:
@@ -220,16 +221,16 @@ def create_app(admin_mode: bool = False) -> Flask:
                 }
                 for tool in pm.list_server_tools()
             ]
-        )
+        ) #所有server里面的tool，输入输出信息
 
-    @app.route("/api/pipelines", methods=["GET"])
+    @app.route("/api/pipelines", methods=["GET"]) #第二
     def list_pipelines() -> Response:
         """List available pipelines.
 
         Returns:
             JSON response with list of pipelines
         """
-        return jsonify(pm.list_pipelines())
+        return jsonify(pm.list_pipelines()) #example里的yaml的文件名，server和pipeline信息，如果有相应参数文件，is_ready为true
 
     @app.route("/api/pipelines", methods=["POST"])
     def save_pipeline() -> Response:
@@ -271,7 +272,7 @@ def create_app(admin_mode: bool = False) -> Flask:
             parsed["_raw_yaml"] = yaml_content
         return jsonify(parsed)
 
-    @app.route("/api/pipelines/<string:name>", methods=["GET"])
+    @app.route("/api/pipelines/<string:name>", methods=["GET"]) #第三
     def get_pipeline(name: str):
         return jsonify(pm.load_pipeline(name))
 
@@ -291,7 +292,7 @@ def create_app(admin_mode: bool = False) -> Flask:
         result = pm.rename_pipeline(name, new_name)
         return jsonify(result)
 
-    @app.route("/api/pipelines/<string:name>/parameters", methods=["GET"])
+    @app.route("/api/pipelines/<string:name>/parameters", methods=["GET"]) #第四
     def get_parameters(name: str):
         return jsonify(pm.load_parameters(name))
 
@@ -1370,8 +1371,37 @@ def create_app(admin_mode: bool = False) -> Flask:
             download_name=path.name
         )
     
+    with app.app_context():
+        try:
+            from .pipeline_manager import global_manager
+            global_manager.start("md_qa") 
+            
+            app.logger.info("Global Retriever Client initialized.")
+        except Exception as e:
+            app.logger.error(f"Failed to start global client: {e}")
+
+        try:
+            LOGGER.info("🔥 Global pipeline warmup starting...")
+            # 初始化 pipeline
+
+            global_manager.run_chat(
+                callback=None,
+                dynamic_params={
+                    "generation": {
+                        "messages": [
+                            {"role": "user", "content": "warmup"}
+                        ]
+                    }
+                },
+            )
+
+            LOGGER.info("✅ Global warmup finished.")
+        except Exception as e:
+            LOGGER.warning(f"Warmup failed: {e}")
+
 
     return app
+
 
 
 def build_ai_system_prompt(context: Dict) -> str:
